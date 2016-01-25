@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('manager.controllers', ['manager.service'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -53,4 +53,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
+  $scope.id = $stateParams.playlistId;
+  //$scope.id = $scope.playlists;
+})
+
+.controller('TaskListCtrl', function($scope){
+  $scope.tasklist = [{title:"test",progress:75}];
+
 });
