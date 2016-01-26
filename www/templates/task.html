@@ -1,5 +1,30 @@
-<ion-view view-title="Task">
+<ion-view>
+	<ion-nav-title>
+    <div class="h1 title">{{ task.data.title }}</div>
+  	<button class="button button-clear button-positive" ng-click="edit({{ task.id }})">Edit</button>
+  </ion-nav-title>
 	<ion-content>
-		<progress max="100" value="50"> </progress>
+    <div class="card">
+      <div class="item item-text-wrap">
+        This is a basic Card which contains an item that has wrapping text.
+        <div ng-switch="task.data.type" ng-model="progress" convert-to-number>
+          <label class="item" ng-switch-when="1">
+
+          </label>
+          <label class="item" ng-switch-when="2" ng-click="">
+            Progress<span class="badge badge-assertive">{{ task.data.progress }}/{{ task.data.total }}</span>
+            <progress max="{{ task.data.total }}" value="{{ task.data.progress }}"> </progress>
+          </label>
+          <label class="item" ng-switch-when="3">Subtasks</label>
+          <div class="animate-switch" ng-switch-default></div>
+        </div>
+        <button class="button button-block button-assertive" ng-click="task.delete()">
+          Delete
+        </button>
+      </div>
+      
+    </div>
+		
+		
 	</ion-content>
 </ion-view>

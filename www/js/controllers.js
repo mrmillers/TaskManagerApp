@@ -1,6 +1,6 @@
 angular.module('manager.controllers', ['manager.service'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, dataService) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -10,54 +10,70 @@ angular.module('manager.controllers', ['manager.service'])
   //});
 
   // Form data for the login modal
-  $scope.loginData = {};
+  $scope.taskData = {};
 
   // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
+  $ionicModal.fromTemplateUrl('templates/edit.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modal = modal;
   });
 
   // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
+  $scope.discard = function() {
+    $scope.taskData = {};
     $scope.modal.hide();
   };
 
   // Open the login modal
-  $scope.login = function() {
+  $scope.edit = function(index) {
+    console.log(index);
+    $scope.taskid = index;
+    if (index<0) {
+      $scope.taskData = dataService.getEmptyData();
+    }
+    else {
+      $scope.taskData = dataService.data[index];
+    }
+    console.log($scope.taskData);
     $scope.modal.show();
   };
 
   // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
+  $scope.save = function() {
+    console.log($scope.taskData)
+    if ($scope.taskid < 0)
+      dataService.add($scope.taskData);
+    else
+      dataService.update($scope.taskid,$scope.taskData);
+    $scope.discard();
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+
+.controller('TaskCtrl', function($stateParams, $ionicPopup, $state, dataService) {
+  this.data = dataService.data[$stateParams.taskid]
+  this.id = $stateParams.taskid;
+  this.delete = function (){
+    var confirmPopup = $ionicPopup.confirm({
+     title: 'Delete ' + this.data.title,
+     template: 'Are you sure you want to delete this task?'
+   });
+
+   confirmPopup.then(function(res) {
+     if(res) {
+      dataService.delete($stateParams.taskid);
+        $state.go('app.tasklist');
+     }
+   });
+  }
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-  $scope.id = $stateParams.playlistId;
-  //$scope.id = $scope.playlists;
+.controller('TaskListCtrl', function($scope, dataService){
+  $scope.tasklist = dataService.data;//[{title:"test",progress:75}];
+
 })
 
-.controller('TaskListCtrl', function($scope){
-  $scope.tasklist = [{title:"test",progress:75}];
+.controller('TaskEditCtrl', function($state){
 
 });

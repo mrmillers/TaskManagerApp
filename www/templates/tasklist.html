@@ -1,7 +1,12 @@
-<ion-view view-title="Task List">
+<ion-view>
+	<ion-nav-title>
+    	<div class="h1 title">Task List</div>
+  		<button class="button button-clear button-positive" ng-click="edit(-1)"><i class="icon ion-plus-round"></i></button>
+  	</ion-nav-title>
+
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="task in tasklist" href="#/playlist/$index">
+      <ion-item ng-repeat="task in tasklist" href="#/app/task/{{ $index }}">
         {{task.title}}
       </ion-item>
     </ion-list>

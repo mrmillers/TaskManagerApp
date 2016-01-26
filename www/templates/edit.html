@@ -1,0 +1,44 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">New Task</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="discard()">Discard</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="save()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Title</span>
+          <input type="text" ng-model="taskData.title">
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Type
+          </div>
+          <select ng-model="taskData.type" convert-to-number>
+            <option value= 1 >Simple</option>
+            <option value= 2 >Array</option>
+            <option value= 3 >Complex</option>
+          </select>
+        </label>
+        
+        <div ng-switch="taskData.type" ng-model="progress" convert-to-number>
+          <label class="item item-input" ng-switch-when="2">
+            <span class="input-label">Total</span>
+            <input type="number" ng-model="taskData.total">
+          </label>
+          <label class="item item-input" ng-switch-when="3">
+            <span class="input-label">Subtasks</span>
+            <input type="number" ng-model="taskData.total">
+          </label>
+          <div ng-switch-default></div>
+        </div>
+      
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Save</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

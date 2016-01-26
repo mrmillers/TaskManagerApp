@@ -41,33 +41,50 @@ angular.module('manager', ['ionic','manager.controllers'])
     }
   })
 
-  .state('app.task', {
-      url: '/task',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/task.html'
-        }
-      }
-    })
-    .state('app.tasklist', {
-      url: '/tasklist',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/tasklist.html',
-          controller: 'TaskListCtrl'
-        }
-      }
-    })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
+  .state('app.tasklist', {
+    url: '/tasklist',
     views: {
       'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+        templateUrl: 'templates/tasklist.html',
+        controller: 'TaskListCtrl'
+      }
+    }
+  })
+
+  .state('app.task', {
+    url: '/task/:taskid',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/task.html',
+        controller: 'TaskCtrl as task'
+      }
+    }
+  })
+
+  .state('app.edit', {
+    url: '/edit',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/edit.html',
+        controller: 'TaskEditCtrl as edit'
       }
     }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/tasklist');
+})
+
+.directive('convertToNumber', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, ngModel) {
+      ngModel.$parsers.push(function(val) {
+        return parseInt(val, 10);
+      });
+      ngModel.$formatters.push(function(val) {
+        return '' + val;
+      });
+    }
+  };
 });
+;
